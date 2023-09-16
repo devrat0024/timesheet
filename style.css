@@ -1,0 +1,64 @@
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .editable {
+        cursor: pointer;
+    }
+
+    .button-container {
+        margin-bottom: 10px;
+    }
+
+    .month-section {
+        background-color: #003366;
+        color: #ffffff;
+        font-weight: bold;
+    }
+
+    #excelTable th.month-section {
+        height: 60px;
+    }
+
+    #excelTable th#monthHeader {
+        font-size: 20px;
+    }
+
+    #tableBody tr:nth-child(2n) {
+        background-color: #f2f2f2;
+    }
+
+    #tableBody tr:first-child {
+        font-weight: bold;
+    }
+
+    #addButton, #deleteButton, #previousButton, #nextButton {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #003366;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    #addButton:hover, #deleteButton:hover, #previousButton:hover, #nextButton:hover {
+        background-color: #00264d;
+    }
+

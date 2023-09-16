@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Excel-like Table with Editable Gantt Chart</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .editable {
+            cursor: pointer;
+        }
+
+        .button-container {
+            margin-bottom: 10px;
+        }
+
+        #currentDate {
+            text-align: right;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .month-section {
+            background-color: #003366;
+            color: #ffffff;
+        }
+
+        .date-row {
+            background-color: #003366;
+            color: #ffffff;
+        }
+
+        .gantt-bar {
+            background-color: #66ccff;
+        }
+    </style>
+</head>
+<body>
+    <div class="button-container">
+        <button id="previousButton">Previous Month</button>
+        <button id="nextButton">Next Month</button>
+    </div>
+    <table id="excelTable">
+        <tr>
+            <th rowspan="2" class="month-section">
+                Softsensor.Ai
+            </th>
+            <th colspan="10" id="monthHeader" class="month-section">Month</th>
+        </tr>
+        <tr class="date-row">
+            <th colspan="10" id="currentDate"></th>
+            <script>
+                const today = new Date();
+                let currentMonth = today.getMonth();
+                const monthHeader = document.getElementById("monthHeader");
+                const currentDate = document.getElementById("currentDate");
+
+                function displayMonth() {
+                    const date = new Date(today.getFullYear(), currentMonth, today.getDate());
+                    const month = date.toLocaleDateString('en-US', { month: 'long' });
+                    const dateNumber = date.toLocaleDateString('en-US', { day: 'numeric' });
+                    monthHeader.innerText = month;
+                    currentDate.innerText = dateNumber;
+                }
+
+                displayMonth();
+
+                function nextMonth() {
+                    currentMonth = (currentMonth + 1) % 12;
+                    displayMonth();
+                }
+
+                function previousMonth() {
+                    currentMonth = (currentMonth - 1 + 12) % 12;
+                    displayMonth();
+                }
+            </script>
+        </tr>
+        <tbody id="tableBody">
+            <script>
+                const numRows = 10; // Initial number of rows
+                const numColumns = 10; // Number of columns in the table
+
+                // Define task data
+                const tasks = [
+                    { name: 'Task 1', startDate: new Date(today.getFullYear(), currentMonth, 5), endDate: new Date(today.getFullYear(), currentMonth, 15) },
+                    { name: 'Task 2', startDate: new Date(today.getFullYear(), currentMonth, 10), endDate: new Date(today.getFullYear(), currentMonth, 20) },
+                    { name: 'Task 3', startDate: new Date(today.getFullYear(), currentMonth, 1), endDate: new Date(today.getFullYear(), currentMonth, 8) }
+                    // Add more tasks as needed
+                ];
+
+                for (let i = 1; i <= numRows; i++) {
+                    document.write('<tr>');
+                    if (i === 1) {
+                        document.write('<td contenteditable="true" class="editable"></td>');
+                    } else {
+                        document.write('<td contenteditable="true" class="editable"></td>');
+                    }
+                    for (let j = 1; j <= numColumns; j++) {
+                        const currentDate = new Date(today.getFullYear(), currentMonth, j);
+                        let isTaskCell = false;
+                        let taskName = '';
+                        for (let k = 0; k < tasks.length; k++) {
+                            if (currentDate >= tasks[k].startDate && currentDate <= tasks[k].endDate) {
+                                isTaskCell = true;
+                                taskName = tasks[k].name;
+                                break;
+                            }
+                        }
+                        if (isTaskCell) {
+                            document.write('<td contenteditable="true" class="editable gantt-bar">' + taskName + '</td>');
+                        } else {
+                            document.write('<td contenteditable="true" class="editable"></td>');
+                        }
+                    }
+                    document.write('</tr>');
+                }
+            </script>
+        </tbody>
+    </table>
+    <button id="addButton">Add Row</button>
+    <button id="deleteButton">Delete Row</button>
+    <script>
+        const cells = document.getElementsByClassName("editable");
+        for (let i = 0; i < cells.length; i++) {
+            cells[i].addEventListener("input", function() {
+                // Perform any desired action when a cell is edited
+                console.log("Cell edited:", this.innerText);
+            });
+        }
+
+        const addButton = document.getElementById("addButton");
+        addButton.addEventListener("click", function() {
+            const tableBody = document.getElementById("tableBody");
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = '<td contenteditable="true" class="editable"></td>';
+            for (let i = 1; i <= numColumns; i++) {
+                newRow.innerHTML += '<td contenteditable="true" class="editable"></td>';
+            }
+            tableBody.appendChild(newRow);
+        });
+
+        const deleteButton = document.getElementById("deleteButton");
+        deleteButton.addEventListener("click", function() {
+            const tableBody = document.getElementById("tableBody");
+            if (tableBody.childElementCount > 0) {
+                tableBody.removeChild(tableBody.lastChild);
+            }
+        });
+
+        const previousButton = document.getElementById("previousButton");
+        previousButton.addEventListener("click", function() {
+            previousMonth();
+        });
+
+        const nextButton = document.getElementById("nextButton");
+        nextButton.addEventListener("click", function() {
+            nextMonth();
+        });
+    </script>
+</body>
+</html>
